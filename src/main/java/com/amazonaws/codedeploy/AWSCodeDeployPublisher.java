@@ -46,6 +46,7 @@ import hudson.tasks.Publisher;
 import hudson.util.DirScanner;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
+import hudson.util.Secret;
 import jenkins.tasks.SimpleBuildStep;
 import net.sf.json.JSONObject;
 
@@ -101,7 +102,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
     private final int proxyPort;
 
     private final String awsAccessKey;
-    private final String awsSecretKey;
+    private final Secret awsSecretKey;
     private final String credentials;
     private final String deploymentMethod;
     private final String versionFileName;
@@ -125,7 +126,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
             String versionFileName,
             String deploymentMethod,
             String awsAccessKey,
-            String awsSecretKey,
+            Secret awsSecretKey,
             String iamRoleArn,
             String externalId,
             String includes,
@@ -194,7 +195,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
 
         final AWSClients aws;
         if ("awsAccessKey".equals(credentials)) {
-            if (StringUtils.isEmpty(this.awsAccessKey) && StringUtils.isEmpty(this.awsSecretKey)) {
+            if (StringUtils.isEmpty(this.awsAccessKey) && StringUtils.isEmpty(Secret.toString(this.awsSecretKey))) {
                 aws = AWSClients.fromDefaultCredentialChain(
                         this.region,
                         this.proxyHost,
@@ -203,7 +204,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
                 aws = AWSClients.fromBasicCredentials(
                         this.region,
                         this.awsAccessKey,
-                        this.awsSecretKey,
+                        Secret.toString(this.awsSecretKey),
                         this.proxyHost,
                         this.proxyPort);
             }
@@ -504,7 +505,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
 
         private String externalId;
         private String awsAccessKey;
-        private String awsSecretKey;
+        private Secret awsSecretKey;
         private String proxyHost;
         private int proxyPort;
 
@@ -543,7 +544,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
         public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
 
             awsAccessKey = formData.getString("awsAccessKey");
-            awsSecretKey = formData.getString("awsSecretKey");
+            awsSecretKey = Secret.fromString(formData.getString("awsSecretKey"));
             proxyHost = formData.getString("proxyHost");
             proxyPort = Integer.parseInt(formData.getString("proxyPort"));
 
@@ -618,12 +619,12 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
 
         public String getAwsSecretKey()
         {
-            return awsSecretKey;
+            return Secret.toString(awsSecretKey);
         }
 
         public void setAwsSecretKey(String awsSecretKey)
         {
-            this.awsSecretKey = awsSecretKey;
+            this.awsSecretKey = Secret.fromString(awsSecretKey);
         }
 
         public String getAwsAccessKey()
@@ -671,7 +672,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
     }
 
     public String getAwsSecretKey() {
-        return awsSecretKey;
+        return Secret.toString(awsSecretKey);
     }
 
     public Long getPollingFreqSec() {
