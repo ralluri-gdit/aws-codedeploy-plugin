@@ -126,7 +126,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
             String versionFileName,
             String deploymentMethod,
             String awsAccessKey,
-            Secret awsSecretKey,
+            String awsSecretKey,
             String iamRoleArn,
             String externalId,
             String includes,
@@ -153,7 +153,7 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
         this.deploymentMethod = deploymentMethod;
         this.versionFileName = versionFileName;
         this.awsAccessKey = awsAccessKey;
-        this.awsSecretKey = awsSecretKey;
+        this.awsSecretKey = Secret.fromString(awsSecretKey);
         this.iamRoleArn = iamRoleArn;
         this.deploymentGroupAppspec = deploymentGroupAppspec;
 
