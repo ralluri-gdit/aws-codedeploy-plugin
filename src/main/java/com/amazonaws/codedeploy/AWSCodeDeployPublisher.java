@@ -134,7 +134,6 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
             int proxyPort,
             String excludes,
             String subdirectory) {
-
         this.externalId = externalId;
         this.applicationName = applicationName;
         this.deploymentGroupName = deploymentGroupName;
@@ -671,8 +670,8 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
         return awsAccessKey;
     }
 
-    public String getAwsSecretKey() {
-        return Secret.toString(awsSecretKey);
+    public Secret getAwsSecretKey() {
+        return awsSecretKey;
     }
 
     public Long getPollingFreqSec() {

@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.BasicSessionCredentials;
@@ -115,6 +116,8 @@ public class AWSClients {
                     arn = msg.substring(arnIdx, arnSpace);
                 }
             }
+        } catch (RuntimeException e) {
+            return "";
         }
 
         String accountId = arn.split(":")[ARN_ACCOUNT_ID_INDEX];
