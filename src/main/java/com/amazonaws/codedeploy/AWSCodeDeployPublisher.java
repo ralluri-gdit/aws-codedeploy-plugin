@@ -107,6 +107,11 @@ public class AWSCodeDeployPublisher extends Publisher implements SimpleBuildStep
     private final String deploymentMethod;
     private final String versionFileName;
 
+    @Deprecated
+    private transient PrintStream logger;
+    @Deprecated
+    private transient Map<String, String> envVars;
+
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
     public AWSCodeDeployPublisher(
